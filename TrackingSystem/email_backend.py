@@ -1,8 +1,8 @@
 from django.core.mail.backends.base import BaseEmailBackend
 
 import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail.mail import Mail
 
 class SendGridEmailpipBackEnd(BaseEmailBackend):
     def send_messages(self, email_messages):

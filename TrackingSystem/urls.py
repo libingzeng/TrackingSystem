@@ -5,17 +5,16 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 Examples:
 Function views
     1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+    2. Add a URL to urlpatterns:  url('', views.home, name='home')
 Class-based views
     1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+    2. Add a URL to urlpatterns:  url('', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    1. Import the include() function: from django.conf.urls import include, url
+    2. Add a URL to urlpatterns:  url('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.urls import re_path
+
 from KumoGT import views
 from KumoGT.registration import sign_up, manage_users, all_users, manage_my_account,\
     change_my_pwd, change_users_pwd, delete_user, activate_user, deactivate_user
@@ -45,70 +44,70 @@ stu_search_options = r'(?:uin=(?P<uin>[0-9]+)/)?'\
                      r'(?:iga=(?P<iga>[yesno]+)/)?$'
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    url(r'^$', views.home, name='home'),
     
     # Admin and users authentication
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
-    path('account/', manage_my_account, name='account'),
-    path('account/change_pwd/', change_my_pwd, name='change_my_pwd'),
-    path('account/reset_pwd/', auth_views.PasswordResetView.\
+    url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
+    url(r'^account/$', manage_my_account, name='account'),
+    url(r'^account/change_pwd/$', change_my_pwd, name='change_my_pwd'),
+    url(r'^account/reset_pwd/$', auth_views.PasswordResetView.\
         as_view(template_name='reset_pwd.html', success_url='done/', subject_template_name='reset_pwd_subject.txt',\
             email_template_name = 'reset_pwd_email.html'), name='reset_pwd'),
-    path('account/reset_pwd/done/',\
+    url(r'^account/reset_pwd/done/$',\
         auth_views.PasswordResetDoneView.as_view(template_name='reset_pwd_done.html'), name='reset_pwd_done'),
-    path('account/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.\
+    url(r'^account/reset/(?P<uidb64>.+)/(?P<token>.+)/$', auth_views.PasswordResetConfirmView.\
         as_view(template_name='reset_pwd_confirm.html', success_url='/account/reset/done/',\
         form_class=AdminChangePasswordForm), name='reset_pwd_confirm'),
-    path('account/reset/done/', auth_views.PasswordResetCompleteView.\
+    url(r'^account/reset/done/$', auth_views.PasswordResetCompleteView.\
         as_view(template_name='reset_pwd_complete.html'), name='reset_pwd_complete'),
-    path('manage_users/', manage_users, name='manage_users'),
-    path('manage_users/sign_up/', sign_up, name='sign_up'),
-    path('manage_users/user_list/', all_users, name='user_list'),
-    path('manage_users/user_list/change_pwd/<int:id>/', change_users_pwd, name='change_users_pwd'),
-    path('manage_users/user_list/delete_user/<int:id>/', delete_user, name='delete_user'),
-    path('manage_users/user_list/activate/<int:id>/', activate_user, name='activate_user'),
-    path('manage_users/user_list/deactivate/<int:id>/', deactivate_user, name='deactivate_user'),
-    path('admin/', admin.site.urls, name='admin'),
+    url(r'^manage_users/$', manage_users, name='manage_users'),
+    url(r'^manage_users/sign_up/$', sign_up, name='sign_up'),
+    url(r'^manage_users/user_list/$', all_users, name='user_list'),
+    url(r'^manage_users/user_list/change_pwd/(?P<id>\d+)/$', change_users_pwd, name='change_users_pwd'),
+    url(r'^manage_users/user_list/delete_user/(?P<id>\d+)/$', delete_user, name='delete_user'),
+    url(r'^manage_users/user_list/activate/(?P<id>\d+)/$', activate_user, name='activate_user'),
+    url(r'^manage_users/user_list/deactivate/(?P<id>\d+)/$', deactivate_user, name='deactivate_user'),
+    url(r'^admin/', admin.site.urls, name='admin'),
 
-    re_path(r'^download_stu_info/' + stu_search_options,\
+    url(r'^download_stu_info/$' + stu_search_options,\
         views.download_stu_info, name = 'download_stu_info'),
-    re_path(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
+    url(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
         views.get_tmp_file, name = 'get_tmp_file'),
 
-    re_path(r'^students/' + stu_search_options\
+    url(r'^students/$' + stu_search_options\
         , views.students, name = 'students'),
     #path('students/', views.students, name = 'students'),
-    path('students/edit/<int:id>/', views.edit_stu, name = 'edit_stu'),
-    path('students/delete/<int:id>/', views.delete_stu, name = 'delete_stu'),
-    path('students/add/', views.create_stu, name = 'create_stu'),
+    url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name = 'edit_stu'),
+    url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name = 'delete_stu'),
+    url(r'^students/add/$', views.create_stu, name = 'create_stu'),
 
-    re_path(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name = 'degrees'),
-    re_path(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.session_note, name = 'session_note'),
 
-    path('upload/', views.upload, name='upload'),
-    path('form_upload/', views.form_upload, name='form_upload'),
+    url(r'^upload/$', views.upload, name='upload'),
+    url(r'^form_upload/$', views.form_upload, name='form_upload'),
     # degree docs    
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degree_plan, name = 'degree_plan'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.preliminary_exam, name = 'preliminary_exam'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)qualifying_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)qualifying_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.qualifying_exam, name = 'qualifying_exam'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)annual_review/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)annual_review/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.annual_review, name = 'annual_review'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.thesis_dissertation_proposal, name = 'thesis_dissertation_proposal'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)final_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)final_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.final_exam, name = 'final_exam'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.thesis_dissertation, name = 'thesis_dissertation'),
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)other_doc/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+    url(r'^degree/(?:(?P<deg_id>\d+)/)other_doc/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.other_doc, name = 'other_doc'),
 
-    re_path(r"^(?P<file_path>.+)$", views.serve_protected_document, name='decrypt_and_serve'),
+    url(r"^(?P<file_path>.+)$", views.serve_protected_document, name='decrypt_and_serve'),
     
 ]
 

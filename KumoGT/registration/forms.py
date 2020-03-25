@@ -48,10 +48,14 @@ class AdminChangePasswordForm(SetPasswordForm):
     )
 
 class ChangePasswordForm(AdminChangePasswordForm):
-    error_messages = {
-        **SetPasswordForm.error_messages,
-        'password_incorrect': _("Your old password was entered incorrectly. Please enter it again."),
-    }
+    #error_messages = {
+    #    **SetPasswordForm.error_messages,
+    #    'password_incorrect': _("Your old password was entered incorrectly. Please enter it again."),
+    #}
+    error_messages = dict(
+        {'password_incorrect': _("Your old password was entered incorrectly. Please enter it again.")},
+        **SetPasswordForm.error_messages
+    )
     old_password = forms.CharField(
         label=_("Old password"),
         strip=False,

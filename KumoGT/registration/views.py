@@ -41,7 +41,7 @@ def all_users(request):
 def change_users_pwd(request, id):
     user = User.objects.get(id = id)
     if user.is_superuser and request.user.id != id: 
-        messages.error("Invalid permission.")
+        messages.error(request, "Invalid permission.")
     elif request.user.id == id:
         return redirect('change_my_pwd')
     if request.method == 'POST':

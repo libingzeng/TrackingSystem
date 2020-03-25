@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: latin-1 -*-
+
 DOCUMENT_TYPE = [('not_sel', 'Not Selected'),
                  ('degree_plan', 'Degree Plan'),
                  ('annual_review', 'Annual Review'),

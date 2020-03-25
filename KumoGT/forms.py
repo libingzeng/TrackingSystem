@@ -109,7 +109,7 @@ def create_doc_form(model_in, type_widget = 0, extra_fields = []):
     attrs = {'Meta':Meta}
 
     _model_form_class = type("DynamicModelForm", (forms.ModelForm,), attrs)     
-        # Parameters: object name, tuple(input father)，dict of meta
+        # Parameters: object name, tuple(input father), dict of meta
     
     return _model_form_class    # return a class
 

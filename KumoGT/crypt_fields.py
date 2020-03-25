@@ -10,7 +10,7 @@ from django.db.models.fields.files import (
 
 from .crypt import Cryptographer
 
-from urllib.parse import quote as url_encode 
+#from urllib.parse import quote as url_encode 
 
 
 class EncryptedFile(BytesIO):

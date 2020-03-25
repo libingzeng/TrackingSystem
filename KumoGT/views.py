@@ -12,7 +12,7 @@ from django.views.static import serve
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
     T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Note,\
     Other_Doc, Qual_Exam_Doc, Annual_Review_Doc
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
     pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form,\
@@ -273,7 +273,14 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 20) # Show 20 students per page. Use 1 for test.
         page = request.GET.get('page')
-        students_page = paginator.get_page(page)
+        #students_page = paginator.get_page(page)
+        try:
+            students_page = paginator.page(page)
+        except PageNotAnInteger:
+            students_page = paginator.page(1)
+        except EmptyPage:
+            students_page = paginator.page(paginator.num_pages)
+
         page = 1 if not page else int(page)
         neigh_pages = [n for n in range(max(page - 2, 1), min(page + 3, paginator.num_pages + 1))]
         if len(neigh_pages) == 0 or neigh_pages[0] > 1:
