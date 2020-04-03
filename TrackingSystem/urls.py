@@ -77,6 +77,7 @@ urlpatterns = [
 
     url(r'^students/$' + stu_search_options\
         , views.students, name = 'students'),
+    url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name = 'show_stu'),
     #path('students/', views.students, name = 'students'),
     url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name = 'edit_stu'),
     url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name = 'delete_stu'),
