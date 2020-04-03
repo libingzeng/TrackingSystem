@@ -51,9 +51,9 @@
     };
 </script>
 
-<style>a{TEXT-DECORATION:none}</style> 
+<style>a{TEXT-DECORATION:none}</style>
 <header class="w3-container w3-theme w3-center w3-row w3-card">
-    <h2>Students</h2>   
+    <h2>Current Students</h2>
 </header>
 <form method="post" id="search_stu_form">
 {% csrf_token %}
@@ -62,28 +62,32 @@
         <div class="w3-cell"><b>UIN:&nbsp;&nbsp;</b>{{ form.uin }}</div>
         <div class="w3-cell"><b>First Name:&nbsp;&nbsp;</b>{{ form.first_name }}</div>
         <div class="w3-cell"><b>Last Name:&nbsp;&nbsp;</b>{{ form.last_name }}</div>
-        <div class="w3-cell"><b>Gender:&nbsp;&nbsp;</b>{{ form.gender }}</div>
-        <div class="w3-cell"><b>Ethnicity:&nbsp;&nbsp;</b>{{ form.ethnicity }}</div>
+        <!-- <div class="w3-cell"><b>Gender:&nbsp;&nbsp;</b>{{ form.gender }}</div>
+        <div class="w3-cell"><b>Ethnicity:&nbsp;&nbsp;</b>{{ form.ethnicity }}</div> -->
     </div>
-    <div class="w3-cell-row w3-padding-small">
+    <!-- <div class="w3-cell-row w3-padding-small">
         <div class="w3-cell"><b>US Residency:&nbsp;&nbsp;</b>{{ form.us_residency }}</div>
         <div class="w3-cell"><b>Texas Residency:&nbsp;&nbsp;</b>{{ form.texas_residency }}</div>
         <div class="w3-cell"><b>Citizenship:&nbsp;&nbsp;</b>{{ form.citizenship }}</div>
-    </div>
+    </div> -->
     <div class="w3-cell-row w3-padding-small">
-        <div class="w3-cell"><b>Status:&nbsp;&nbsp;</b>{{ form.status }}</div>
+        <div class="w3-cell"><b>Current Degree:&nbsp;&nbsp;</b>{{ form.cur_degree }}</div>
+        <div class="w3-cell"><b>Advisor:&nbsp;&nbsp;</b>{{ form.advisor }}</div>
+        <!-- <div class="w3-cell"><b>Status:&nbsp;&nbsp;</b>{{ form.status }}</div> -->
         <div class="w3-cell"><b>Start Semester:&nbsp;&nbsp;</b>
             {{ form.start_sem }}{{ form.start_year }}</div>
-        <div class="w3-cell"><b>Current Degree:&nbsp;&nbsp;</b>{{ form.cur_degree }}</div>
-        <div class="w3-cell"><b>Current Major:&nbsp;&nbsp;</b>{{ form.cur_degree__major }}</div>
+
+        <!-- <div class="w3-cell"><b>Current Major:&nbsp;&nbsp;</b>{{ form.cur_degree__major }}</div> -->
     </div>
-    <div class="w3-cell-row w3-padding-small">
-        <div class="w3-cell"><b>Advisor:&nbsp;&nbsp;</b>{{ form.advisor }}</div>
+    <!-- <div class="w3-cell-row w3-padding-small">
+
         <div class="w3-cell"><b>UPE:&nbsp;&nbsp;</b>{{ form.upe }}</div>
         <div class="w3-cell"><b>ACE:&nbsp;&nbsp;</b>{{ form.ace }}</div>
         <div class="w3-cell"><b>IGA:&nbsp;&nbsp;</b>{{ form.iga }}</div>
-    </div>
-</div>
+    </div> -->
+
+</div><br>
+
 </form>
 <div class="w3-cell-row w3-center w3-margin-bottom">
     <button form='search_stu_form' type="submit" class="w3-button w3-theme-d5 w3-margin-right">Search</button>
@@ -92,7 +96,7 @@
 <div class="w3-cell-row">
 {% include "pagination.html" with this_page=students neigh_pages=neigh_pages %}
 {% if request.user.is_superuser %}
-    <button type="button" class="w3-button w3-theme-d5 w3-cell w3-margin-right" 
+    <button type="button" class="w3-button w3-theme-d5 w3-cell w3-margin-right"
         onclick="download_stu_info()">Download</button>
 {% endif %}
 <div class="w3-cell">
@@ -109,7 +113,8 @@
         <th style="width:7%">Status</th>
         <th style="width:17%">Current Degree, Major</th>
         <th style="width:13%">Operation</th>
-        <th style="width:29%">Access</th>
+        <th style="width:16%">Access</th>
+        <th style="width:14%">Details</th>
     </tr>
     {% for stu in students %}
     <tr class=" w3-hover-light-gray">
@@ -172,12 +177,17 @@
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
                         stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">View</button>
                 {% endif %}
-                
+
             {% endif %}
+        </td>
+        <td class="w3-padding-16">
+            <a href="{% url 'show_stu' id=stu.id %}">
+                <button type="button" class="w3-button w3-theme-d5">View</button>
+            </a> 
         </td>
     </tr>
     {% empty %}
-    <tr><th colspan="7">No eligible student.</th></tr>
+    <tr><th colspan="7">Sorry, there is no match result.</th></tr>
     {% endfor %}
 </table>
 <div class="w3-cell-row w3-center w3-padding-16">

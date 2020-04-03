@@ -335,6 +335,11 @@ def edit_stu(request, id, back_url = None):
             'form': form,
             'title': title,
             })
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def show_stu(request, id):
+    return render(request, 'show_stu.html')
+
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def delete_stu(request, id):
