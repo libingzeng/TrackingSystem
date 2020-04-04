@@ -31,6 +31,7 @@ class Student(models.Model):
     upe = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='UPE')
     ace = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='ACE')
     iga = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='IGA')
+    propos_date = models.CharField(max_length=30, blank=False,null = True, verbose_name='Proposal Date')
     class Meta:
         verbose_name = 'Student'
 

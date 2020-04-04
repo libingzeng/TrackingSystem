@@ -80,7 +80,6 @@
         <!-- <div class="w3-cell"><b>Current Major:&nbsp;&nbsp;</b>{{ form.cur_degree__major }}</div> -->
     </div>
     <!-- <div class="w3-cell-row w3-padding-small">
-
         <div class="w3-cell"><b>UPE:&nbsp;&nbsp;</b>{{ form.upe }}</div>
         <div class="w3-cell"><b>ACE:&nbsp;&nbsp;</b>{{ form.ace }}</div>
         <div class="w3-cell"><b>IGA:&nbsp;&nbsp;</b>{{ form.iga }}</div>
@@ -113,7 +112,8 @@
         <th style="width:7%">Status</th>
         <th style="width:17%">Current Degree, Major</th>
         <th style="width:13%">Operation</th>
-        <th style="width:29%">Access</th>
+        <th style="width:16%">Access</th>
+        <th style="width:14%">Details</th>
     </tr>
     {% for stu in students %}
     <tr class=" w3-hover-light-gray">
@@ -178,6 +178,11 @@
                 {% endif %}
 
             {% endif %}
+        </td>
+        <td class="w3-padding-16">
+            <a href="{% url 'show_stu' id=stu.id %}">
+                <button type="button" class="w3-button w3-theme-d5">View</button>
+            </a>
         </td>
     </tr>
     {% empty %}

@@ -1,5 +1,4 @@
 """TrackingSystem URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
 Examples:
@@ -45,7 +44,7 @@ stu_search_options = r'(?:uin=(?P<uin>[0-9]+)/)?'\
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
-    
+
     # Admin and users authentication
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
@@ -75,8 +74,9 @@ urlpatterns = [
     url(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
         views.get_tmp_file, name = 'get_tmp_file'),
 
-    url(r'^students/$' + stu_search_options\
-        , views.students, name = 'students'),
+    url(r'^students/' + stu_search_options, views.students, name = 'students'),
+    url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name = 'show_stu'),
+    url(r'^students/basic_info/(?P<id>\d+)/$', views.basic_info, name = 'basic_info'),
     #path('students/', views.students, name = 'students'),
     url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name = 'edit_stu'),
     url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name = 'delete_stu'),
@@ -89,7 +89,7 @@ urlpatterns = [
 
     url(r'^upload/$', views.upload, name='upload'),
     url(r'^form_upload/$', views.form_upload, name='form_upload'),
-    # degree docs    
+    # degree docs
     url(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degree_plan, name = 'degree_plan'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
@@ -108,7 +108,7 @@ urlpatterns = [
         views.other_doc, name = 'other_doc'),
 
     url(r"^(?P<file_path>.+)$", views.serve_protected_document, name='decrypt_and_serve'),
-    
+
 ]
 
 # if settings.DEBUG:

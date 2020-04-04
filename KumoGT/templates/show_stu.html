@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table border="1">
+        <tr>
+            <td>
+                <a href="{% url 'basic_info' id=id %}" class="w3-button w3-block w3-left-align">Basic Information</a>
+            </td>
+            <td>
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Documents</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Degree Information</a>
+            </td>
+            <td>
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Advising Notes</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Other Documents</a>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+
+
+{% endblock %}

@@ -23,6 +23,7 @@ from .functions import deg_doc, get_info_form, get_stu_objs, post_degrees, post_
 
 from openpyxl import Workbook
 
+
 import os
 
 def conditional_decorator(dec, condition):
@@ -47,7 +48,7 @@ def upload(request):
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'upload.html')
-    
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def form_upload(request):
     if request.method == 'POST':
@@ -185,7 +186,7 @@ def final_exam(request, deg_id, option = '', id = 0):
                 'option': option,
                 'info_form': info_form,
             })
-            
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def thesis_dissertation(request, deg_id, option = '', id = 0):
     info_form = get_info_form(request, deg_id, T_D_Info, thesis_dissertation_info_form)
@@ -294,7 +295,7 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         'students': students_page,
         'neigh_pages': neigh_pages,
         })
-        
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def create_stu(request, back_url = None):
     if request.method == 'POST':
@@ -303,7 +304,7 @@ def create_stu(request, back_url = None):
         if form.is_valid():
             form.save()
             messages.success(request, 'Student is added.')
-        else: 
+        else:
             messages.error(request, mark_safe("{0}".format(form.errors)))
         return redirect('create_stu')
     else:
@@ -313,7 +314,7 @@ def create_stu(request, back_url = None):
             'form': form,
             'title': title,
             })
-            
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def edit_stu(request, id, back_url = None):
     if request.method == 'POST':
@@ -323,7 +324,7 @@ def edit_stu(request, id, back_url = None):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Student is updated.')
-            else: 
+            else:
                 messages.error(request, mark_safe("{0}".format(form.errors)))
         else:
             messages.info(request, 'Noting is changed.')
@@ -335,7 +336,24 @@ def edit_stu(request, id, back_url = None):
             'form': form,
             'title': title,
             })
-            
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def show_stu(request, id):
+    return render(request, 'show_stu.html',  {
+        'id': id,
+
+        })
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def basic_info(request, id):
+    student = Student.objects.get(id = id)
+    return render(request, 'basic_info.html',  {
+        'student': student,
+
+        })
+
+
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def delete_stu(request, id):
     if not permission_check(request, Student, 'del'): return HttpResponse("Permission Denied")
@@ -432,20 +450,20 @@ def download_stu_info(request, **kwargs):
             'fields': fields,
         })
 
-class Tmp_File(object): 
-    def __init__(self, filename): 
-        self.filename = filename 
+class Tmp_File(object):
+    def __init__(self, filename):
+        self.filename = filename
         self.fd = None
-        
-    def open(self, mode): 
-        if self.fd == None: 
-            self.fd = open(self.filename, mode) 
-        return self.fd 
 
-    def __del__(self): 
-        if self.fd != None: 
-            self.fd.close() 
-            os.remove(self.filename) 
+    def open(self, mode):
+        if self.fd == None:
+            self.fd = open(self.filename, mode)
+        return self.fd
+
+    def __del__(self):
+        if self.fd != None:
+            self.fd.close()
+            os.remove(self.filename)
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def get_tmp_file(request, file_path, content_type):

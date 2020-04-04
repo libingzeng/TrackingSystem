@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+		<table class="w3-container w3-table w3-bordered w3-centered w3-card">
+			<caption  style="text-align:center"><b>Basic Information</b></caption>
+    <tr>
+    	<th align="left">Name</th>
+      <th align="left">{{student.first_name}} {{student.middle_name}} {{student.last_name}}</th>
+        <td> </td>
+    </tr>
+    <tr >
+        <th align="left">UIN</th>
+        <th align="left">{{student.uin}}</th>
+        <td> </td>
+    </tr>
+    <tr>
+    	<th align="left">Email</th>
+      <th align="left">{{student.email}}</th>
+        <td> </td>
+    </tr>
+    <tr>
+    	<th align="left">Start Semester</th>
+      <th align="left">{{student.start_sem}}</th>
+        <td> </td>
+    </tr>
+    <tr>
+    	<th align="left">Degree Advisor</th>
+      <th align="left">{{student.advisor}}</th>
+        <td> </td>
+    </tr>
+    <tr>
+    	<th align="left">Proposal Date</th>
+      <th align="left">{{student.propos_date}}</th>
+        <td> </td>
+    </tr>
+</table>
+
+{% endblock %}
