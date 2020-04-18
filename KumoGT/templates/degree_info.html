@@ -14,7 +14,7 @@
 </style>
 <div class=" w3-card w3-margin-bottom">
 <header class="w3-container w3-theme w3-center w3-row">      
-    <h2>Graduate Student Tracking System</h2>
+    <h3>Degree Information</h3>
 </header>
     <div class="w3-container w3-center">
         <p>
@@ -29,13 +29,25 @@
         <table class="w3-table w3-border w3-bordered w3-centered">
         <tr style="width:50%">
             <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Basic Information</a> 
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Degree Plan</a> 
             </td>
             <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Documents</a>
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Final Exam</a>
             </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Preliminary Exam</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis's Proposal</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Qualifying Exam</a>
+            </td>    
         </tr>
-        <tr style="width:50%">
+<!--         <tr style="width:50%">
             <td class="w3-center">
                 <a href="{% url 'degree_info' stu.id %}" class="w3-button w3-block w3-left-align">Degree Information</a>
             </td>
@@ -43,7 +55,7 @@
                 <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Advising Notes</a>    
             </td>
         </tr>
-    </table>
+ -->    </table>
 </div>
 
 {% endblock %}

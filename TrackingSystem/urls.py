@@ -70,12 +70,12 @@ urlpatterns = [
     url(r'^manage_users/user_list/deactivate/(?P<id>\d+)/$', deactivate_user, name='deactivate_user'),
     url(r'^admin/', admin.site.urls, name='admin'),
 
-    url(r'^download_stu_info/$' + stu_search_options,\
+    url(r'^download_stu_info/' + stu_search_options,\
         views.download_stu_info, name = 'download_stu_info'),
     url(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
         views.get_tmp_file, name = 'get_tmp_file'),
 
-    url(r'^students/$' + stu_search_options\
+    url(r'^students/' + stu_search_options\
         , views.students, name = 'students'),
     url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name = 'show_stu'),
     #path('students/', views.students, name = 'students'),
@@ -83,6 +83,7 @@ urlpatterns = [
     url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name = 'delete_stu'),
     url(r'^students/add/$', views.create_stu, name = 'create_stu'),
 
+    url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name = 'degree_info'), 
     url(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name = 'degrees'),
     url(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\

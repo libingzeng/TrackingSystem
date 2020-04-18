@@ -338,7 +338,25 @@ def edit_stu(request, id, back_url = None):
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def show_stu(request, id):
-    return render(request, 'show_stu.html')
+    try:
+        student = Student.objects.get(pk = id)
+    except Student.DoesNotExist:
+        raise Http404("Student does not exist.")
+    context = {
+        'stu': student
+    }   
+    return render(request, 'show_stu.html', context)
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def degree_info(request, id):
+    try:
+        student = Student.objects.get(pk = id)
+    except Student.DoesNotExist:
+        raise Http404("Student does not exist.")
+    context = {
+        'stu': student
+    }   
+    return render(request, 'degree_info.html', context)
 
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
