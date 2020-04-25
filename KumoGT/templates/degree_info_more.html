@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    table {
+          border-collapse: collapse;
+    }
+    td {
+        text-align: center;
+        height: 50px
+    }
+
+    tr:hover {background-color:#f5f5f5;}
+</style>
+<div class=" w3-card w3-margin-bottom">
+<header class="w3-container w3-theme w3-center w3-row">      
+    <h3>Degree Information More</h3>
+</header>
+    <div class="w3-container w3-center">
+        <p>
+            <b>UIN:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ stu.uin }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ stu.first_name }} {{ stu.middle_name }} {{ stu.last_name }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </p>
+    </div>
+        <table class="w3-table w3-border w3-bordered w3-centered">
+        <tr style="width:50%">
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Degree Plan</a> 
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Final Exam</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Preliminary Exam</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis's Proposal</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Qualifying Exam</a>
+            </td>    
+        </tr>
+<!--         <tr style="width:50%">
+            <td class="w3-center">
+                <a href="{% url 'degree_info' stu.id %}" class="w3-button w3-block w3-left-align">Degree Information</a>
+            </td>
+            <td class="w3-center">
+                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Advising Notes</a>    
+            </td>
+        </tr>
+ -->    </table>
+</div>
+
+{% endblock %}

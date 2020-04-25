@@ -311,6 +311,8 @@ def students(request, **kwargs):  # uin, first_name, last_name, gender, status, 
         if kwargs:
             students = students.filter(**seach_dict)
         students = students.order_by('uin')
+        if not students:
+            return render(request,'NotFind.html')
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 20)  # Show 20 students per page. Use 1 for test.
         page = request.GET.get('page')
@@ -384,10 +386,26 @@ def edit_stu(request, id, back_url=None):
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def show_stu(request, id):
-    return render(request, 'show_stu.html',  {
-        'id': id,
+    try:
+        student = Student.objects.get(pk = id)
+    except Student.DoesNotExist:
+        raise Http404("Student does not exist.")
+    context = {
+        'stu': student
+    }   
+    return render(request, 'show_stu.html', context)
 
-    })
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def degree_info_more(request, id):
+    try:
+        student = Student.objects.get(pk = id)
+    except Student.DoesNotExist:
+        raise Http404("Student does not exist.")
+    context = {
+        'stu': student
+    }   
+    return render(request, 'degree_info_more.html', context)
+
 
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)

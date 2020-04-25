@@ -70,8 +70,8 @@ urlpatterns = [
     url(r'^manage_users/user_list/deactivate/(?P<id>\d+)/$', deactivate_user, name='deactivate_user'),
     url(r'^admin/', admin.site.urls, name='admin'),
 
-    url(r'^download_stu_info/$' + stu_search_options,\
-        views.download_stu_info, name='download_stu_info'),
+    url(r'^download_stu_info/' + stu_search_options,\
+        views.download_stu_info, name = 'download_stu_info'),
     url(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
         views.get_tmp_file, name='get_tmp_file'),
 
@@ -79,12 +79,14 @@ urlpatterns = [
     url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name='show_stu'),
     url(r'^students/basic_info/(?P<id>\d+)/$', views.basic_info, name='basic_info'),
     url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name='degree_info'),
+    url(r'^students/degree_info_more/(?P<id>\d+)/$', views.degree_info_more, name='degree_info_more'),
     url(r'^students/degree_note/(?P<id>\d+)/$', views.degree_note, name='degree_note'),
     #path('students/', views.students, name = 'students'),
     url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name='edit_stu'),
     url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name='delete_stu'),
     url(r'^students/add/$', views.create_stu, name='create_stu'),
 
+    url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name = 'degree_info'), 
     url(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name='degrees'),
     url(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
