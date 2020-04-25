@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{# 20200403 edit #}
+{% block content %}
+
+<div class=" w3-card w3-margin-bottom">
+<header class="w3-container w3-theme w3-center w3-row">
+    <h2>Degree Note</h2>
+</header>
+</div>
+<div class="w3-container w3-theme-l5 w3-center">
+    <p>
+        <b>UIN:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{ degree.stu.uin }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{ degree.stu.first_name }} {{ degree.stu.middle_name }} {{ degree.stu.last_name }}
+    </p>
+</div>
+<div class="w3-container w3-theme-l5 w3-center">
+<form class="more-info-form" method='POST'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="save btn btn-default">Save</button>
+  </form>
+
+</div>
+
+{% endblock %}

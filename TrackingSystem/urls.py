@@ -1,5 +1,4 @@
 """TrackingSystem URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
 Examples:
@@ -45,7 +44,7 @@ stu_search_options = r'(?:uin=(?P<uin>[0-9]+)/)?'\
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
-    
+
     # Admin and users authentication
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
@@ -53,18 +52,19 @@ urlpatterns = [
     url(r'^account/change_pwd/$', change_my_pwd, name='change_my_pwd'),
     url(r'^account/reset_pwd/$', auth_views.PasswordResetView.\
         as_view(template_name='reset_pwd.html', success_url='done/', subject_template_name='reset_pwd_subject.txt',\
-            email_template_name = 'reset_pwd_email.html'), name='reset_pwd'),
+                email_template_name='reset_pwd_email.html'), name='reset_pwd'),
     url(r'^account/reset_pwd/done/$',\
         auth_views.PasswordResetDoneView.as_view(template_name='reset_pwd_done.html'), name='reset_pwd_done'),
     url(r'^account/reset/(?P<uidb64>.+)/(?P<token>.+)/$', auth_views.PasswordResetConfirmView.\
         as_view(template_name='reset_pwd_confirm.html', success_url='/account/reset/done/',\
-        form_class=AdminChangePasswordForm), name='reset_pwd_confirm'),
+                form_class=AdminChangePasswordForm), name='reset_pwd_confirm'),
     url(r'^account/reset/done/$', auth_views.PasswordResetCompleteView.\
         as_view(template_name='reset_pwd_complete.html'), name='reset_pwd_complete'),
     url(r'^manage_users/$', manage_users, name='manage_users'),
     url(r'^manage_users/sign_up/$', sign_up, name='sign_up'),
     url(r'^manage_users/user_list/$', all_users, name='user_list'),
-    url(r'^manage_users/user_list/change_pwd/(?P<id>\d+)/$', change_users_pwd, name='change_users_pwd'),
+    url(r'^manage_users/user_list/change_pwd/(?P<id>\d+)/$',
+        change_users_pwd, name='change_users_pwd'),
     url(r'^manage_users/user_list/delete_user/(?P<id>\d+)/$', delete_user, name='delete_user'),
     url(r'^manage_users/user_list/activate/(?P<id>\d+)/$', activate_user, name='activate_user'),
     url(r'^manage_users/user_list/deactivate/(?P<id>\d+)/$', deactivate_user, name='deactivate_user'),
@@ -73,44 +73,46 @@ urlpatterns = [
     url(r'^download_stu_info/' + stu_search_options,\
         views.download_stu_info, name = 'download_stu_info'),
     url(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
-        views.get_tmp_file, name = 'get_tmp_file'),
+        views.get_tmp_file, name='get_tmp_file'),
 
-    url(r'^students/' + stu_search_options\
-        , views.students, name = 'students'),
-    url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name = 'show_stu'),
+    url(r'^students/' + stu_search_options, views.students, name='students'),
+    url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name='show_stu'),
+    url(r'^students/basic_info/(?P<id>\d+)/$', views.basic_info, name='basic_info'),
+    url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name='degree_info'),
+    url(r'^students/degree_note/(?P<id>\d+)/$', views.degree_note, name='degree_note'),
     #path('students/', views.students, name = 'students'),
-    url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name = 'edit_stu'),
-    url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name = 'delete_stu'),
-    url(r'^students/add/$', views.create_stu, name = 'create_stu'),
+    url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name='edit_stu'),
+    url(r'^students/delete/(?P<id>\d+)/$', views.delete_stu, name='delete_stu'),
+    url(r'^students/add/$', views.create_stu, name='create_stu'),
 
     url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name = 'degree_info'), 
     url(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.degrees, name = 'degrees'),
+        views.degrees, name='degrees'),
     url(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.session_note, name = 'session_note'),
+        views.session_note, name='session_note'),
 
     url(r'^upload/$', views.upload, name='upload'),
     url(r'^form_upload/$', views.form_upload, name='form_upload'),
-    # degree docs    
+    # degree docs
     url(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.degree_plan, name = 'degree_plan'),
+        views.degree_plan, name='degree_plan'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.preliminary_exam, name = 'preliminary_exam'),
+        views.preliminary_exam, name='preliminary_exam'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)qualifying_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.qualifying_exam, name = 'qualifying_exam'),
+        views.qualifying_exam, name='qualifying_exam'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)annual_review/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.annual_review, name = 'annual_review'),
+        views.annual_review, name='annual_review'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.thesis_dissertation_proposal, name = 'thesis_dissertation_proposal'),
+        views.thesis_dissertation_proposal, name='thesis_dissertation_proposal'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)final_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.final_exam, name = 'final_exam'),
+        views.final_exam, name='final_exam'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.thesis_dissertation, name = 'thesis_dissertation'),
+        views.thesis_dissertation, name='thesis_dissertation'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)other_doc/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.other_doc, name = 'other_doc'),
+        views.other_doc, name='other_doc'),
 
     url(r"^(?P<file_path>.+)$", views.serve_protected_document, name='decrypt_and_serve'),
-    
+
 ]
 
 # if settings.DEBUG:

@@ -1,61 +1,51 @@
 {% extends 'base.html' %}
-
+{# 20200403 edit #}
 {% block content %}
-<style>
-    table {
-          border-collapse: collapse;
-    }
-    td {
-        text-align: center;
-        height: 50px
-    }
 
-    tr:hover {background-color:#f5f5f5;}
-</style>
 <div class=" w3-card w3-margin-bottom">
-<header class="w3-container w3-theme w3-center w3-row">      
-    <h3>Degree Information</h3>
+<header class="w3-container w3-theme w3-center w3-row">
+    <h2>Degrees Information</h2>
 </header>
-    <div class="w3-container w3-center">
-        <p>
-            <b>UIN:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {{ stu.uin }}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b>Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {{ stu.first_name }} {{ stu.middle_name }} {{ stu.last_name }}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </p>
-    </div>
-        <table class="w3-table w3-border w3-bordered w3-centered">
-        <tr style="width:50%">
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Degree Plan</a> 
-            </td>
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Final Exam</a>
-            </td>
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Preliminary Exam</a>
-            </td>
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis</a>
-            </td>
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis's Proposal</a>
-            </td>
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Qualifying Exam</a>
-            </td>    
-        </tr>
-<!--         <tr style="width:50%">
-            <td class="w3-center">
-                <a href="{% url 'degree_info' stu.id %}" class="w3-button w3-block w3-left-align">Degree Information</a>
-            </td>
-            <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Advising Notes</a>    
-            </td>
-        </tr>
- -->    </table>
+<div class="w3-container w3-theme-l5 w3-center">
+    <p>
+        <b>UIN:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{ student.uin }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}
+    </p>
 </div>
+</div>
+		<table class="w3-container w3-table w3-bordered w3-centered w3-card">
+			{# <caption  style="text-align:center"><b>Degree Information for {{student.first_name}} {{student.middle_name}} {{student.last_name}}</b></caption> #}
+    <tr>
+      <th align="left">Program</th>
+      <th align="left">Major</th>
+      <th align="left">First registered date</th>
+      <th align="left">Last registered date</th>
+      <th align="left">Degree received date</th>
+      <th align="left">Degree Note</th>
+      <th align="left">More Info</th>
+         <td> </td>
+    </tr>
+  {% for degree in student.degrees.all %}
+  </tr>
+    <td align="left">{{degree.deg_type}}</td>
+    <td align="left">{{degree.major}}</td>
+    <td align="left">{{degree.first_reg_year}}{{degree.first_reg_sem}}</td>
+    <td align="left">{{degree.last_reg_year}}{{degree.last_reg_sem}}</td>
+    <td align="left">{{degree.deg_recv_year}}{{degree.deg_recv_sem}}</td>
+    <td class="w3-padding-16">
+        <a href="{% url 'degree_note' id=degree.id %}">
+            <button type="button" class="w3-button w3-theme-d5">Edit</button>
+        </a>
+    <td class="w3-padding-16">
+        <a href="{% url 'degree_note' id=degree.id %}">
+            <button type="button" class="w3-button w3-theme-d5">View</button>
+        </a>
+    </td>
+    <td> </td>
+  <tr>
+   {% endfor %}
+</table>
 
 {% endblock %}
