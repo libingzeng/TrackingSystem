@@ -29,7 +29,7 @@
         <table class="w3-table w3-border w3-bordered w3-centered">
         <tr style="width:50%">
             <td class="w3-center">
-                <a href="{% url 'basic_info' id =id %}" class="w3-button w3-block w3-left-align">Basic Information</a> 
+                <a href="{% url 'basic_info' stu.id %}" class="w3-button w3-block w3-left-align">Basic Information</a> 
             </td>
             <td class="w3-center">
                 <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Documents</a>
@@ -37,7 +37,7 @@
         </tr>
         <tr style="width:50%">
             <td class="w3-center">
-                <a href="{% url 'degree_info' id=id %}" class="w3-button w3-block w3-left-align">Degree Information</a>
+                <a href="{% url 'degree_info' stu.id %}" class="w3-button w3-block w3-left-align">Degree Information</a>
             </td>
             <td class="w3-center">
                 <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Advising Notes</a>    

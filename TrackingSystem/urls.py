@@ -79,6 +79,7 @@ urlpatterns = [
     url(r'^students/show_stu/(?P<id>\d+)/$', views.show_stu, name='show_stu'),
     url(r'^students/basic_info/(?P<id>\d+)/$', views.basic_info, name='basic_info'),
     url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name='degree_info'),
+    url(r'^students/degree_info_more/(?P<id>\d+)/$', views.degree_info_more, name='degree_info_more'),
     url(r'^students/degree_note/(?P<id>\d+)/$', views.degree_note, name='degree_note'),
     #path('students/', views.students, name = 'students'),
     url(r'^students/edit/(?P<id>\d+)/$', views.edit_stu, name='edit_stu'),
