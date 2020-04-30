@@ -8,8 +8,8 @@ from .sel_options import GENDER, ETHNICITY_TYPE, US_RESIDENCY_TYPE,\
     DEGREE_PLAN_DOC_TYPE, PRE_EXAM_DOC_TYPE, EXAM_RESULT_TYPE,\
     T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE, QUAL_EXAM_DOC_TYPE,\
     ANNUAL_REVIEW_DOC_TYPE, ANNUAL_REVIEW_STATUS_TYPE
+from django.core.files.storage import FileSystemStorage
 import os
-
 
 class Student(models.Model):
     uin = models.CharField(max_length=63, blank=False, unique=True, verbose_name='UIN')
@@ -69,6 +69,9 @@ class Degree(models.Model):
     class Meta:
         verbose_name = 'Degree'
 
+class DocumentFile(models.Model):
+    docfile = models.FileField(upload_to='documents/')
+    # docfile = models.FileField(storage=FileSystemStorage(location=settings.MEDIA_ROOT), upload_to='documents/', default='settings.MEDIA_ROOT/documents/anonymous.csv')
 
 class Document(models.Model):
     doc = EncryptedFileField(upload_to='documents/', verbose_name='Document')

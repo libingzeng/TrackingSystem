@@ -11,19 +11,19 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
     T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Note,\
-    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc
+    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc, DocumentFile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
     pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form,\
-    session_note_form, degree_note_form
+    session_note_form, degree_note_form, DocumentForm
 from .crypt import Cryptographer
 from .functions import deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_note,\
     delete, get_stu_search_dict, permission_check
 
 from openpyxl import Workbook
-
-
+import pandas as pd
+import csv
 import os
 
 
@@ -311,8 +311,9 @@ def students(request, **kwargs):  # uin, first_name, last_name, gender, status, 
         if kwargs:
             students = students.filter(**seach_dict)
         students = students.order_by('uin')
-        if not students:
-            return render(request,'NotFind.html')
+        # if not students:
+        #     print('hei')
+        #     return render(request,'NotFind.html')
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 20)  # Show 20 students per page. Use 1 for test.
         page = request.GET.get('page')
@@ -358,6 +359,55 @@ def create_stu(request, back_url=None):
             'form': form,
             'title': title,
         })
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def parse_stu(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():     
+            # newdoc = DocumentFile(docfile = request.FILES['docfile'])
+            # newdoc.save()
+            csv_file = request.FILES['docfile']
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request, 'THIS IS NOT A CSV FILE')
+                return redirect("parse_stu")
+            decoded_file = csv_file.read().decode('utf-8').splitlines()
+            data = csv.DictReader(decoded_file)
+            # check if any columns in the csv file is what we want
+            headers = data.fieldnames
+            parsed_lis = [' UIN', ' Email', ' Name', '  Start Semester', ' Current Degree', ' Gender', '  Advisor']
+            intersection = [i for i in headers if i in parsed_lis]
+            if not intersection:
+                messages.error(request, 'NO COLUMN MATCH IN THIS CSV FILE')
+                return redirect("parse_stu")
+            for row in data:
+                # prnit(row)
+                student = Student()
+                student.uin = row[' UIN']
+                student.email = row[' Email']
+                name_detail = row[' Name'].split()
+                student.first_name = name_detail[0]
+                student.last_name = name_detail[-1]
+                student.middle_name = name_datail[1] if len(name_detail) > 2 else ''
+                start_detail = row['  Start Semester'].split()
+                print(start_detail)
+                student.start_sem = start_detail[0]
+                student.start_year = start_detail[1]
+                # cur_degree is onetoone field, need to create Degree instance 
+                # student.cur_degree = row[' Current Degree'] ??
+                student.gender = row[' Gender']
+                student.advisor = row['  Advisor']
+                student.save()
+                messages.success(request, 'File is parsed!.')
+        else:
+            return render(request, 'form_error.html', {'form': form})
+        return redirect("parse_stu")
+    else:
+        title = 'Parse a Student CSV File'
+        context = {
+            'title': title
+        }
+        return render(request, 'parse_stu.html', context)
 
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)

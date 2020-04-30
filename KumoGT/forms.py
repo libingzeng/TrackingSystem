@@ -175,3 +175,10 @@ class degree_note_form(forms.ModelForm):
         widgets = {
             'note': forms.Textarea(attrs={'cols': 50, 'rows': 10, 'style': "width:80%"}),
         }
+
+
+class DocumentForm(forms.Form):
+    docfile = forms.FileField(
+        label='Select a file',
+        help_text='max. 42 megabytes'
+        )
