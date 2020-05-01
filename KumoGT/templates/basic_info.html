@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {# 20200403 edit #}
 {% block content %}
+<div class=" w3-card w3-margin-bottom">
+<header class="w3-container w3-theme w3-center w3-row">
+    <h2>Basic Information</h2>
+</header>
+</div>
 		<table class="w3-container w3-table w3-bordered w3-centered w3-card">
-			<caption  style="text-align:center"><b>Basic Information</b></caption>
+			{# <caption  style="text-align:center"><b>Basic Information</b></caption> #}
     <tr>
     	<th align="left">Name</th>
       <th align="left">{{student.first_name}} {{student.middle_name}} {{student.last_name}}</th>
