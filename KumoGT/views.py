@@ -311,9 +311,9 @@ def students(request, **kwargs):  # uin, first_name, last_name, gender, status, 
         if kwargs:
             students = students.filter(**seach_dict)
         students = students.order_by('uin')
-        # if not students:
+        if not students:
         #     print('hei')
-        #     return render(request,'NotFind.html')
+            return render(request,'NotFind.html')
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 20)  # Show 20 students per page. Use 1 for test.
         page = request.GET.get('page')
