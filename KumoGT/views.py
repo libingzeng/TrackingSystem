@@ -11,12 +11,12 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
     T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Note,\
-    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc, DocumentFile
+    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc, DocumentFile, Advising_Note
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
     pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form,\
-    session_note_form, degree_note_form, DocumentForm
+    session_note_form, degree_note_form, DocumentForm, advising_note_form
 from .crypt import Cryptographer
 from .functions import deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_note,\
     delete, get_stu_search_dict, permission_check
@@ -62,6 +62,7 @@ def form_upload(request):
             return redirect('home')
     else:
         form = create_doc_form(Deg_Plan_Doc)
+    print 'dddd'
     return render(request, 'form_upload.html', {
         'form': form
     })
@@ -444,6 +445,26 @@ def show_stu(request, id):
         'stu': student
     }   
     return render(request, 'show_stu.html', context)
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def advising_note(request, id):
+    if request.method == 'POST':
+        form = advising_note_form(request.POST)
+        if form.is_valid():
+            note = form.cleaned_data['note']
+            stu = Student.objects.get(pk = id)
+            firstName = stu.first_name
+            lastName = stu.last_name
+            advisingNote = Advising_Note(first_name = firstName, last_name = lastName, note = note)
+            advisingNote.save()
+            return redirect('advising_note', id = id)
+    else:
+        form = advising_note_form()
+        advisingNotes = Advising_Note.objects.all()
+    return render(request, 'advising_note.html', {
+        'form': form,
+        'advising_notes': advisingNotes,
+    })
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def degree_info_more(request, id):

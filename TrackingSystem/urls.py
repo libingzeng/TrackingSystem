@@ -95,6 +95,9 @@ urlpatterns = [
 
     url(r'^upload/$', views.upload, name='upload'),
     url(r'^form_upload/$', views.form_upload, name='form_upload'),
+
+    url(r'^students/advising_note/(?P<id>\d+)/$', views.advising_note, name='advising_note'),
+    #url(r'^students/advising_note/$', views.advising_note, name='advising_note'),
     # degree docs
     url(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degree_plan, name='degree_plan'),

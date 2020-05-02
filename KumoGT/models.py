@@ -86,6 +86,15 @@ class Document(models.Model):
     class Meta:
         abstract = True
 
+class Advising_Note(models.Model):
+    date = models.DateField(blank = True, null = True, auto_now = True)
+    first_name = models.CharField(max_length=127, blank=True, verbose_name='First Name')
+    last_name = models.CharField(max_length=127, blank=True, verbose_name='Last Name')
+    note = models.CharField(max_length=4096, blank=True, verbose_name='Note')
+
+    class Meta:
+        verbose_name = 'Advising Note'
+
 
 class Deg_Plan_Doc(Document):
     doc_type = models.CharField(max_length=255, choices=DEGREE_PLAN_DOC_TYPE,

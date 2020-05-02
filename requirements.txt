@@ -4,3 +4,4 @@ openpyxl
 sendgrid
 psycopg2 
 pycrypto
+pandas
