@@ -8,8 +8,8 @@ from .sel_options import GENDER, ETHNICITY_TYPE, US_RESIDENCY_TYPE,\
     DEGREE_PLAN_DOC_TYPE, PRE_EXAM_DOC_TYPE, EXAM_RESULT_TYPE,\
     T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE, QUAL_EXAM_DOC_TYPE, Qual_RESULT_TYPE,\
     ANNUAL_REVIEW_DOC_TYPE, ANNUAL_REVIEW_STATUS_TYPE
+from django.core.files.storage import FileSystemStorage
 import os
-
 
 class Student(models.Model):
     uin = models.CharField(max_length=63, blank=False, unique=True, verbose_name='UIN')
@@ -69,6 +69,9 @@ class Degree(models.Model):
     class Meta:
         verbose_name = 'Degree'
 
+class DocumentFile(models.Model):
+    docfile = models.FileField(upload_to='documents/')
+    # docfile = models.FileField(storage=FileSystemStorage(location=settings.MEDIA_ROOT), upload_to='documents/', default='settings.MEDIA_ROOT/documents/anonymous.csv')
 
 class Qual(models.Model):
     result = models.CharField(max_length=63, choices=Qual_RESULT_TYPE, default='Pass', verbose_name='Result')
@@ -95,6 +98,15 @@ class Document(models.Model):
 
     class Meta:
         abstract = True
+
+class Advising_Note(models.Model):
+    date = models.DateField(blank = True, null = True, auto_now = True)
+    first_name = models.CharField(max_length=127, blank=True, verbose_name='First Name')
+    last_name = models.CharField(max_length=127, blank=True, verbose_name='Last Name')
+    note = models.CharField(max_length=4096, blank=True, verbose_name='Note')
+
+    class Meta:
+        verbose_name = 'Advising Note'
 
 
 class Deg_Plan_Doc(Document):

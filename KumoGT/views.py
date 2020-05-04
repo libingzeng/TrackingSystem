@@ -11,19 +11,20 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student, Degree, Qual, Pre_Exam_Doc, Pre_Exam_Info, Qual_Exam_Info,\
     T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Note,\
-    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc
+    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc, DocumentFile, Advising_Note
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, qual_form,\
     pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form,\
-    session_note_form, degree_note_form, qual_exam_info_form
+    session_note_form, degree_note_form, DocumentForm, advising_note_form
+
 from .crypt import Cryptographer
 from .functions import deg_doc, get_info_form, get_stu_objs, get_deg_objs, post_degrees, post_quals, post_session_note,\
     delete, get_stu_search_dict, permission_check
 
 from openpyxl import Workbook
-
-
+import pandas as pd
+import csv
 import os
 import pdb
 
@@ -63,6 +64,7 @@ def form_upload(request):
             return redirect('home')
     else:
         form = create_doc_form(Deg_Plan_Doc)
+    print 'dddd'
     return render(request, 'form_upload.html', {
         'form': form
     })
@@ -313,6 +315,7 @@ def students(request, **kwargs):  # uin, first_name, last_name, gender, status, 
             students = students.filter(**seach_dict)
         students = students.order_by('uin')
         if not students:
+        #     print('hei')
             return render(request,'NotFind.html')
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 20)  # Show 20 students per page. Use 1 for test.
@@ -360,6 +363,55 @@ def create_stu(request, back_url=None):
             'title': title,
         })
 
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def parse_stu(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():     
+            # newdoc = DocumentFile(docfile = request.FILES['docfile'])
+            # newdoc.save()
+            csv_file = request.FILES['docfile']
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request, 'THIS IS NOT A CSV FILE')
+                return redirect("parse_stu")
+            decoded_file = csv_file.read().decode('utf-8').splitlines()
+            data = csv.DictReader(decoded_file)
+            # check if any columns in the csv file is what we want
+            headers = data.fieldnames
+            parsed_lis = [' UIN', ' Email', ' Name', '  Start Semester', ' Current Degree', ' Gender', '  Advisor']
+            intersection = [i for i in headers if i in parsed_lis]
+            if not intersection:
+                messages.error(request, 'NO COLUMN MATCH IN THIS CSV FILE')
+                return redirect("parse_stu")
+            for row in data:
+                # prnit(row)
+                student = Student()
+                student.uin = row[' UIN']
+                student.email = row[' Email']
+                name_detail = row[' Name'].split()
+                student.first_name = name_detail[0]
+                student.last_name = name_detail[-1]
+                student.middle_name = name_datail[1] if len(name_detail) > 2 else ''
+                start_detail = row['  Start Semester'].split()
+                print(start_detail)
+                student.start_sem = start_detail[0]
+                student.start_year = start_detail[1]
+                # cur_degree is onetoone field, need to create Degree instance 
+                # student.cur_degree = row[' Current Degree'] ??
+                student.gender = row[' Gender']
+                student.advisor = row['  Advisor']
+                student.save()
+                messages.success(request, 'File is parsed!.')
+        else:
+            return render(request, 'form_error.html', {'form': form})
+        return redirect("parse_stu")
+    else:
+        title = 'Parse a Student CSV File'
+        context = {
+            'title': title
+        }
+        return render(request, 'parse_stu.html', context)
+
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def edit_stu(request, id, back_url=None):
@@ -395,6 +447,26 @@ def show_stu(request, id):
         'stu': student
     }   
     return render(request, 'show_stu.html', context)
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def advising_note(request, id):
+    if request.method == 'POST':
+        form = advising_note_form(request.POST)
+        if form.is_valid():
+            note = form.cleaned_data['note']
+            stu = Student.objects.get(pk = id)
+            firstName = stu.first_name
+            lastName = stu.last_name
+            advisingNote = Advising_Note(first_name = firstName, last_name = lastName, note = note)
+            advisingNote.save()
+            return redirect('advising_note', id = id)
+    else:
+        form = advising_note_form()
+        advisingNotes = Advising_Note.objects.all()
+    return render(request, 'advising_note.html', {
+        'form': form,
+        'advising_notes': advisingNotes,
+    })
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def degree_info_more(request, id):

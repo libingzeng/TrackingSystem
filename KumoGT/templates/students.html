@@ -98,6 +98,11 @@
     <button type="button" class="w3-button w3-theme-d5 w3-cell w3-margin-right"
         onclick="download_stu_info()">Download</button>
 {% endif %}
+<div class="w3-cell w3-margin-right">
+    {% if perms.KumoGT.add_student %}
+        <a href="{% url 'parse_stu' %}" target="_blank"><button class="w3-button w3-theme-d5 w3-margin-right">Parse</button></a>
+    {% endif %}
+</div>
 <div class="w3-cell">
     {% if perms.KumoGT.add_student %}
         <a href="{% url 'create_stu' %}" target="_blank"><button class="w3-button w3-theme-d5">Add</button></a>

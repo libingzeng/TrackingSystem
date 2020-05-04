@@ -1,7 +1,9 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Qual, Pre_Exam_Info, Qual_Exam_Info, Fin_Exam_Info, T_D_Info,\
-    Session_Note
+
+from .models import Student, Degree, Qual, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
+    Session_Note, Advising_Note
+
 from .sel_options import STUDENT_STATUS_TYPE, GENDER, ETHNICITY_TYPE,\
     US_RESIDENCY_TYPE, TEXAS_RESIDENCY_TYPE, CITIZENSHIP,\
     SEMESTER_TYPE, DEGREE_TYPE, MAJOR_TYPE, YES_NO_TYPE
@@ -126,6 +128,15 @@ def create_doc_form(model_in, type_widget=0, extra_fields=[]):
 
     return _model_form_class    # return a class
 
+class advising_note_form(forms.ModelForm):
+    class Meta:
+        model = Advising_Note        # model input
+        fields = ['note']
+        widgets = {
+            'note': forms.Textarea(attrs={'cols': 128, 'rows': 32, 'style': "width:80%"}),
+        }
+    
+
 
 class pre_exam_info_form(forms.ModelForm):
     class Meta:
@@ -184,3 +195,10 @@ class degree_note_form(forms.ModelForm):
         widgets = {
             'note': forms.Textarea(attrs={'cols': 50, 'rows': 10, 'style': "width:80%"}),
         }
+
+
+class DocumentForm(forms.Form):
+    docfile = forms.FileField(
+        label='Select a file',
+        help_text='max. 42 megabytes'
+        )
