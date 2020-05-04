@@ -89,6 +89,8 @@ urlpatterns = [
     url(r'^students/degree_info/(?P<id>\d+)/$', views.degree_info, name = 'degree_info'), 
     url(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name='degrees'),
+    url(r'^degree/(?:(?P<deg_id>\d+)/)quals/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.quals, name='quals'),
     url(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.session_note, name='session_note'),
 
@@ -101,6 +103,9 @@ urlpatterns = [
         views.preliminary_exam, name='preliminary_exam'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)qualifying_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.qualifying_exam, name='qualifying_exam'),
+    url(r'^degree/(?:(?P<deg_id>\d+)/)qualifying_exam_new/(?:(?P<option>[a-z_]+)/)?$',\
+        views.qualifying_exam_new, name='qualifying_exam_new'),
+    # url(r'^students/qualifying_exam_new/(?P<id>\d+)/$', views.qualifying_exam_new, name='qualifying_exam_new'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)annual_review/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.annual_review, name='annual_review'),
     url(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\

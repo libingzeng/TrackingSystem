@@ -24,6 +24,8 @@
             <b>Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {{ stu.first_name }} {{ stu.middle_name }} {{ stu.last_name }}
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>Degree Type:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ deg.deg_type }}
         </p>
     </div>
         <table class="w3-table w3-border w3-bordered w3-centered">
@@ -44,7 +46,7 @@
                 <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Thesis's Proposal</a>
             </td>
             <td class="w3-center">
-                <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Qualifying Exam</a>
+                <a href="{% url 'quals' deg_id=deg.id %}" class="w3-button w3-block w3-left-align">Qualifying Exam</a>
             </td>    
         </tr>
 <!--         <tr style="width:50%">

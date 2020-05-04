@@ -6,7 +6,7 @@ from .sel_options import GENDER, ETHNICITY_TYPE, US_RESIDENCY_TYPE,\
     TEXAS_RESIDENCY_TYPE, CITIZENSHIP, STUDENT_STATUS_TYPE, SEMESTER_TYPE,\
     YES_NO_TYPE, DEGREE_TYPE, MAJOR_TYPE,\
     DEGREE_PLAN_DOC_TYPE, PRE_EXAM_DOC_TYPE, EXAM_RESULT_TYPE,\
-    T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE, QUAL_EXAM_DOC_TYPE,\
+    T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE, QUAL_EXAM_DOC_TYPE, Qual_RESULT_TYPE,\
     ANNUAL_REVIEW_DOC_TYPE, ANNUAL_REVIEW_STATUS_TYPE
 import os
 
@@ -68,6 +68,19 @@ class Degree(models.Model):
 
     class Meta:
         verbose_name = 'Degree'
+
+
+class Qual(models.Model):
+    result = models.CharField(max_length=63, choices=Qual_RESULT_TYPE, default='Pass', verbose_name='Result')
+    date_year = models.SmallIntegerField(blank=False, default=0, verbose_name='Exam Date Year',
+                                              validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
+    date_sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,
+                                     default='fall', verbose_name='Exam Date Semester')
+    deg = models.ForeignKey(Degree, related_name='quals',
+                            on_delete=models.CASCADE, verbose_name='Degree')
+
+    class Meta:
+        verbose_name = 'Qual'
 
 
 class Document(models.Model):

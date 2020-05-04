@@ -4,15 +4,17 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.http import HttpResponse
 
-from .models import Deg_Plan_Doc, Student, Degree, Session_Note,\
+from .models import Deg_Plan_Doc, Student, Degree, Qual, Session_Note,\
     Annual_Review_Doc, Qual_Exam_Doc
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import create_doc_form, deg_form, session_note_form
+from .forms import create_doc_form, deg_form, qual_form, session_note_form
 
 import re
 
 from django.contrib.auth.decorators import user_passes_test
+
+import pdb
 
 def permission_check(request, model, option = ''):
     perm_type = {'del':'delete', 'del_all':'delete', 'add':'add', None:'change', 'ch':'change'}
@@ -204,6 +206,20 @@ def get_stu_objs(model, form, stu_id, option = '', form_needed = True):
         new_form = form(prefix = 'new') if option == 'add' and stu_id != '0' else None
         return [objs, student, new_form]
 
+def get_deg_objs(model, form, deg_id, option = '', form_needed = True):
+    objs = model.objects.all() if deg_id == '0' else model.objects.filter(deg_id = deg_id)
+    degree = Degree.objects.get(id = deg_id) if deg_id != '0' else None
+    if form_needed:
+        forms = []
+        for obj in objs:
+            forms.append(form(instance = obj, prefix = str(obj.id)))
+        if option == 'add' and deg_id != '0':
+            forms.append(form(prefix = 'new'))
+        return [forms, degree]
+    else:
+        new_form = form(prefix = 'new') if option == 'add' and deg_id != '0' else None
+        return [objs, degree, new_form]
+
 def post_degrees(request, stu_id, option = '', id = 0):
     forms = []
     degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
@@ -260,6 +276,35 @@ def post_degrees(request, stu_id, option = '', id = 0):
     elif not error: messages.success(request, 'Degrees are updated.')
     else: messages.warning(request, 'Some degrees are not updated.')
     return redirect('degrees', stu_id = stu_id)
+
+def post_quals(request, deg_id, option = '', id = 0):
+    forms = []
+    quals = Qual.objects.all() if deg_id == '0' else Qual.objects.filter(deg_id = deg_id)
+    changed, error = False, False
+    for qual in quals:
+        forms.append(qual_form(request.POST, instance = qual, prefix = str(qual.id)))
+    for form in forms:
+        if form.has_changed():
+            changed = True
+            if form.is_valid():
+                form.save()
+            else:
+                error = True
+    if deg_id != '0':
+        degree = Degree.objects.get(id = deg_id)
+        if option == 'add':
+            changed = True
+            new_form = qual_form(request.POST, prefix = 'new')
+            if new_form.is_valid():
+                qual = new_form.save(commit = False)
+                qual.deg = degree
+                qual.save()
+            else:
+                error = True
+    if not changed: messages.info(request, 'Noting is changed.')
+    elif not error: messages.success(request, 'Quals are updated.')
+    else: messages.warning(request, 'Some quals are not updated.')
+    return redirect('quals', deg_id = deg_id)
 
 def post_session_note(request, stu_id, option = '', id = 0):
     changed, error = False, False

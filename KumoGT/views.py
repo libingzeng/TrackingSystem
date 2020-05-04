@@ -9,22 +9,23 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
+from .models import Deg_Plan_Doc, Student, Degree, Qual, Pre_Exam_Doc, Pre_Exam_Info, Qual_Exam_Info,\
     T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Note,\
     Other_Doc, Qual_Exam_Doc, Annual_Review_Doc
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, qual_form,\
     pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form,\
-    session_note_form, degree_note_form
+    session_note_form, degree_note_form, qual_exam_info_form
 from .crypt import Cryptographer
-from .functions import deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_note,\
+from .functions import deg_doc, get_info_form, get_stu_objs, get_deg_objs, post_degrees, post_quals, post_session_note,\
     delete, get_stu_search_dict, permission_check
 
 from openpyxl import Workbook
 
 
 import os
+import pdb
 
 
 def conditional_decorator(dec, condition):
@@ -398,11 +399,13 @@ def show_stu(request, id):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def degree_info_more(request, id):
     try:
-        student = Student.objects.get(pk = id)
-    except Student.DoesNotExist:
-        raise Http404("Student does not exist.")
+        degree = Degree.objects.get(id = id)
+    except Degree.DoesNotExist:
+        raise Http404("Degree does not exist.")
+    student = Student.objects.get(pk = degree.stu.id)
     context = {
-        'stu': student
+        'deg': degree,
+        'stu': student,
     }   
     return render(request, 'degree_info_more.html', context)
 
@@ -467,6 +470,27 @@ def degrees(request, stu_id, option='', id=0):
         return render(request, 'degrees.html', {
             'stu': student,
             'cur_deg_id': cur_deg_id,
+            'forms': forms,
+            'option': option,
+        })
+
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def quals(request, deg_id, option='', id=0):
+    if option == 'del':
+        if not permission_check(request, Qual, option):
+            return HttpResponse("Permission Denied")
+        return delete(request, Qual, id, "Qual", "",
+                      "result", "/degree/" + deg_id + "/quals/")
+    if request.method == 'POST':
+        if not permission_check(request, Qual, option):
+            return HttpResponse("Permission Denied")
+        return post_quals(request, deg_id, option, id)
+    else:
+        forms, degree = get_deg_objs(Qual, qual_form, deg_id, option)
+        return render(request, 'quals.html', {
+            'stu': degree.stu,
+            'deg': degree,
             'forms': forms,
             'option': option,
         })

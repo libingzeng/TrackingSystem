@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class=" w3-card w3-margin-bottom">
+<header class="w3-container w3-theme w3-center w3-row">      
+    <h2>Qualifying Exams</h2>
+</header>
+{% include 'stu_info_line.html' %}
+</div>
+<div class=" w3-card">
+<form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
+        <table class="w3-container w3-table w3-bordered w3-centered">
+            <tr class="w3-theme-l3">
+                <th style="width:33%">Exam Date</th>
+                <th style="width:33%">Pass Mark</th>
+                <th style="width:33%">Operation</th>
+            </tr>
+            {% for form in forms %}
+                <tr class="w3-hover-light-gray">
+                    <td class="w3-cell-row" style="width:33%">{{ form.date_sem }} {{ form.date_year }}</td>
+                    <td class="w3-cell-row" style="width:33%">{{ form.result }}</td>
+                    {% if form.instance.id %}
+                        {% if deg %}
+                            <td style="width:33%">
+                                {% if perms.KumoGT.delete_qual %}
+                                    <a href="{% url 'quals' deg_id=deg.id option='del' id=form.instance.id %}">
+                                        <button type="button" class="w3-button w3-red">Delete</button>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td style="width:33%">
+                                {% if perms.KumoGT.delete_qual %}
+                                    <a href="{% url 'quals' deg_id=0 option='del' id=form.instance.id %}">
+                                        <button type="button" class="w3-button w3-red">Delete</button>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% else %}
+                        <td colspan="2"></td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <th class="w3-padding-16" colspan="5">No Qual</th>
+                </tr>
+            {% endfor %}
+        </table>
+</form>
+</div>
+{% if deg %}
+    {% if perms.KumoGT.add_qual %}
+        {% if option == 'add' %}
+            <a href="{% url 'quals' deg_id=deg.id %}"><button class="w3-button w3-theme-d5">Cancel</button></a>
+        {% else %}
+            <a href="{% url 'quals' deg_id=deg.id option='add' %}"><button class="w3-button w3-theme-d5">Add</button></a>
+        {% endif %}
+    {% endif %}
+{% endif %}
+<div class="w3-cell-row w3-center">
+    {% if perms.KumoGT.change_qual %}
+        <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+    {% endif %}
+</div>
+{% endblock %}

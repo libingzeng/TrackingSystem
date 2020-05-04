@@ -77,6 +77,9 @@ EXAM_RESULT_TYPE = [('none', '----'),
                  ('pass', 'Pass'),
                  ('fail', 'Fail')]
 
+Qual_RESULT_TYPE = [('pass', 'Pass'),
+                 ('fail', 'Fail')]
+
 YES_NO_TYPE = [('yes', 'Yes'),
                ('no', 'No')]
 

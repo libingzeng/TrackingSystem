@@ -1,11 +1,10 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
+from .models import Student, Degree, Qual, Pre_Exam_Info, Qual_Exam_Info, Fin_Exam_Info, T_D_Info,\
     Session_Note
 from .sel_options import STUDENT_STATUS_TYPE, GENDER, ETHNICITY_TYPE,\
     US_RESIDENCY_TYPE, TEXAS_RESIDENCY_TYPE, CITIZENSHIP,\
     SEMESTER_TYPE, DEGREE_TYPE, MAJOR_TYPE, YES_NO_TYPE
-
 
 class stu_search_form(forms.Form):
     uin = forms.CharField(label='UIN', max_length=63, required=False,
@@ -85,6 +84,17 @@ class deg_form(forms.ModelForm):
         }
 
 
+class qual_form(forms.ModelForm):
+    class Meta:
+        model = Qual
+        exclude = ['deg']
+        widgets = {
+            'result': forms.RadioSelect(attrs={'class': 'w3-select w3-cell', 'style': 'width: auto;'}),
+            'date_year': forms.NumberInput(attrs={'class': 'w3-input w3-cell', 'style': 'width:45%'}),
+            'date_sem': forms.Select(attrs={'class': 'w3-select w3-cell', 'style': 'width:52%'}),
+        }
+
+
 def create_doc_form(model_in, type_widget=0, extra_fields=[]):
     '''Generate Model Form for docs dynamically
         type_widget: 0 for select, others for input
@@ -105,7 +115,6 @@ def create_doc_form(model_in, type_widget=0, extra_fields=[]):
             (attrs={'class': 'w3-select'},
              years=[y for y in range(timezone.now().year - 7, timezone.now().year + 8)])
         }
-
     for field in extra_fields:
         Meta.fields.append(field[0])
         Meta.widgets[field[0]] = field[1]
